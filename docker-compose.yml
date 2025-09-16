@@ -1,0 +1,83 @@
+services:
+  # MongoDB (único) – usado pelo Orion, IoT Agent e STH
+  mongo-db:
+    image: mongo:4.4
+    container_name: fiware-mongo
+    restart: always
+    hostname: mongo-db
+    command: ["mongod", "--nojournal"]
+    volumes:
+      - mongo-data:/data/db
+
+  # Orion Context Broker
+  orion:
+    image: fiware/orion:3.11.0
+    container_name: fiware-orion
+    restart: always
+    hostname: orion
+    depends_on:
+      - mongo-db
+    ports:
+      - "1026:1026"
+    command: -dbhost mongo-db -logLevel DEBUG -corsOrigin __ALL
+
+  # STH Comet – Histórico
+  sth-comet:
+    image: telefonicaiot/fiware-sth-comet
+    container_name: fiware-sth-comet
+    restart: always
+    hostname: sth-comet
+    depends_on:
+      - mongo-db
+    ports:
+      - "8666:8666"
+    environment:
+      - STH_HOST=0.0.0.0
+      - STH_PORT=8666
+      - DB_PREFIX=sth_
+      - LOGOPS_LEVEL=DEBUG
+
+  # Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: fiware-mosquitto
+    restart: always
+    hostname: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  # IoT Agent UL
+  iot-agent:
+    image: fiware/iotagent-ul:latest
+    container_name: fiware-iot-agent
+    restart: always
+    hostname: iot-agent
+    depends_on:
+      - mongo-db
+      - mosquitto
+      - orion
+    ports:
+      - "4041:4041"
+    environment:
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=1026
+      - IOTA_CB_NGSI_VERSION=v2
+
+      - IOTA_NORTH_PORT=4041
+
+      - IOTA_MONGO_HOST=mongo-db
+      - IOTA_MONGO_PORT=27017
+
+      - IOTA_MQTT_HOST=mosquitto
+      - IOTA_MQTT_PORT=1883
+
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=true
+      - IOTA_AUTOCAST=true
+      - IOTA_PROVIDER_URL=http://iot-agent:4041
+
+volumes:
+  mongo-data:
