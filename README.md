@@ -1,40 +1,104 @@
-TechVerse.FutMap.Edge
-📌 Descrição do Projeto
+# ⚽ FutMap
 
-O FutMap é uma aplicação web/mobile-first desenvolvida para conectar jogadores, escolas de futebol e torneios em uma única plataforma interativa.
+Projeto de IoT desenvolvido para a Sprint do Passa Bola na disciplina de Edge Computing and Computer Systems da FIAP.
 
-O propósito do projeto é facilitar a descoberta, organização e participação em eventos esportivos de futebol amador e escolar. Através de um mapa interativo, os usuários podem visualizar escolas, torneios e eventos próximos, aplicando filtros dinâmicos e acessando informações detalhadas de cada local.
+## 📝 Descrição do Projeto
 
-A aplicação conta com:
+Este projeto traz a experiência de um placar analogico para partidas amadoras de futebol de mesa, utilizando IoT e automação para detecção de gols em tempo real.
 
-Autenticação de usuários (cadastro, login e gerenciamento de sessão).
+Utilizando o ESP32
 
-Mapa com pins interativos representando escolas, torneios e eventos, cada um com cor e ícone específico.
+A detecção ocorre quando a bola atravessa uma barreira infravermelha (IR), acionando a exibição do placar em um display LCD I2C, que mostra em tempo real o número de gols marcados. O evento também pode ser anulado com um botão de anular gol.
 
-Drawer interativo (BottomSheet) que exibe informações detalhadas sobre cada evento/local.
+Cada gol detectado é enviado automaticamente para um servidor, que atualiza o placar em tempo real. Esse placar pode ser incorporado a transmissões ao vivo ou exibido no site do Passa Bola, proporcionando uma experiência semelhante à de jogos profissionais e aumentando o engajamento do público.
 
-Sistema de avaliação (rating) com ícones customizados.
+## 🎯 Escopo
 
-Filtros dinâmicos (ChipFilter) para selecionar os tipos de locais exibidos.
+- Protótipo com ESP32, LCD I2C e cinco Botões;
+- Simulação fiel no Wokwi com possibilidade de migração para hardware real sem alterações significativas;
+- Integração opcional com servidor (HTTP/MQTT) e dashboard em tempo real usando Node-Red.
 
-Perfil do usuário com opções de favoritos, preferências, segurança e ajuda.
+## ✅ Objetivos Entregáveis
 
-Arquitetura mobile-first utilizando React + TailwindCSS com componentes reutilizáveis.
+- Firmware funcional para ESP32 (código-fonte);
+- Instruções para simulação no Wokwi e execução no hardware;
+- Código do servidor simples e dashboard (opcional);
+- Plano de testes e critérios de aceitação.
 
-Integração com API para gerenciamento de usuários e dados.
+## 🏆 Critérios de Aceitação
 
-🎯 Escopo
+## 🏗️ Arquitetura Proposta
+A arquitetura do projeto foi desenhada para integrar sensores físicos, processamento em tempo real e visualização dos dados em um painel de controle.
 
-Fornecer uma interface moderna e responsiva para usuários que desejam explorar oportunidades esportivas.
+- 🛰️ Sensores IoT (IR): detectam quando a bola cruza a linha do gol;
+- 📡 MQTT Broker (Mosquitto): atua como intermediário para receber e distribuir as mensagens publicadas pelos sensores;
+- 📊 Dashboard (Node-RED Dashboard): fornece uma interface gráfica acessível via navegador, permitindo acompanhar os gols em tempo real;
+- 🖥️ Display LCD I2C: funciona como atuador, exibindo o placar físico atualizado conforme os dados processados no Node-RED.
 
-Criar um ambiente seguro com autenticação e gestão de perfil.
+Toda essa infraestrutura roda em containers Docker, facilitando a instalação, configuração e portabilidade do sistema.
 
-Oferecer uma navegação fluida e simples em dispositivos móveis, que são o público-alvo principal.
+<div align="center">
+  
+  ![Infraestrutura do Servidor](FutMap-Diagram.png)
+  
+</div>
 
-Entregar um protótipo funcional com integração ao backend (MockAPI) que poderá futuramente ser expandido para produção.
 
-🌍 Contexto
+## 🧰 Componentes Utilizados
 
-O FutMap nasce dentro do cenário de transformação digital do esporte amador, onde a falta de centralização de informações ainda dificulta a participação de jovens atletas em torneios e a divulgação de eventos por parte de organizadores.
+- ESP32
+- 5xBotão
+- LCD I2C
 
-Com isso, o FutMap se posiciona como um hub digital, aproximando jogadores, organizadores e escolas, e promovendo o crescimento do futebol de base no Brasil.
+## 🛠️ Recursos Necessários
+
+### Software / Ferramentas
+
+- Wokwi (simulação);
+- Arduino IDE (ou PlatformIO) com suporte a ESP32;
+- Node-Red (para servidor e dashboard, rodando em máquina virtual com FIWARE via Docker Compose);
+- Navegador moderno para dashboard (opcional).
+
+### Bibliotecas Recomendadas
+
+- WiFi.h (ESP32);
+- PubSubClient (opcional, para MQTT);
+- LiquidCrystal_I2C.h (para LCD I2C).
+
+## ▶️ Instruções de Uso
+
+## Video
+
+[Youtube](https://youtu.be/p5SRT9606aE)
+
+## 📄 Arquivo código-fonte
+
+Todo o funcionamento do sistema de monitoramento com IRs, botão e display LCD I2C está implementado no código ESP32 a seguir:
+
+[👉 Visualizar código no GitHub](app.cpp)
+
+## 🐳 Executando com Docker Compose
+
+Para facilitar a execução da aplicação e de toda a stack FIWARE necessária (Orion, IoT Agent, Mosquitto, MongoDB, STH-Comet), disponibilizamos um arquivo docker-compose.yml.
+
+### ▶️ Passos para rodar
+
+1) Suba os serviços com:
+
+```bash
+  docker-compose up -d
+```
+
+2) Verifique se os containers estão rodando:
+
+```bash
+  docker ps
+```
+
+[👉 Visualizar docker-compose.yaml no GitHub](./docker-compose.yaml)
+
+Lucas dos Reis Aquino - 562414
+Lucas Perez Bonato - 565356
+Eduarda de Castro Coutinho dos Santos - 562184
+Diogo Oliveira Lima - 562559
+Leandro Simoneli da Silva - 566539
