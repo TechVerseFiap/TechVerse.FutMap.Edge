@@ -32,8 +32,8 @@ A arquitetura do projeto foi desenhada para integrar sensores físicos, processa
 
 - 🛰️ Sensores IoT (IR): detectam quando a bola cruza a linha do gol;
 - 📡 MQTT Broker (Mosquitto): atua como intermediário para receber e distribuir as mensagens publicadas pelos sensores;
-- 📊 Dashboard (Node-RED Dashboard): fornece uma interface gráfica acessível via navegador, permitindo acompanhar os gols em tempo real;
-- 🖥️ Display LCD I2C: funciona como atuador, exibindo o placar físico atualizado conforme os dados processados no Node-RED.
+- 📊 Dashboard: fornece uma interface gráfica acessível via navegador, permitindo acompanhar os gols em tempo real;
+- 🖥️ Display LCD I2C: funciona como atuador, exibindo o placar físico atualizado conforme os dados processados.
 
 Toda essa infraestrutura roda em containers Docker, facilitando a instalação, configuração e portabilidade do sistema.
 
