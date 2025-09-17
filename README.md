@@ -71,6 +71,10 @@ Toda essa infraestrutura roda em containers Docker, facilitando a instalação, 
 
 [Youtube](https://youtu.be/p5SRT9606aE)
 
+# Wokwi
+
+[Link](https://wokwi.com/projects/442302326741881857)
+
 ## 📄 Arquivo código-fonte
 
 Todo o funcionamento do sistema de monitoramento com IRs, botão e display LCD I2C está implementado no código ESP32 a seguir:
